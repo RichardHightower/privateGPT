@@ -89,7 +89,7 @@ class LLMSettings(BaseModel):
 
 
 class VectorstoreSettings(BaseModel):
-    database: Literal["chroma", "qdrant"]
+    database: Literal["chroma", "qdrant", "postgres"]
 
 
 class LocalSettings(BaseModel):
@@ -163,6 +163,40 @@ class UISettings(BaseModel):
     )
 
 
+class PostgresSettings(BaseModel):
+    host: str | None = Field(
+        None,
+        description=(
+            "Host name\n"
+        ),
+    )
+    port: int | None = Field(5432, description="Port of the postgres DBinterface.") 
+    user: str | None = Field(
+        None,
+        description=(
+            "User name\n"
+        ),
+    )
+    pwd: str | None = Field(
+        None,
+        description=(
+            "Password\n"
+        ),
+    )
+    database: str | None = Field(
+        None,
+        description=(
+            "Database name\n"
+        ),
+    )
+    table_name: str | None = Field(
+        None,
+        description=(
+            "Vector table name\n"
+        ),
+    )
+    embed_dim: int | None = Field(1536, description="Embedding dimension.")
+
 class QdrantSettings(BaseModel):
     location: str | None = Field(
         None,
@@ -228,6 +262,7 @@ class Settings(BaseModel):
     openai: OpenAISettings
     vectorstore: VectorstoreSettings
     qdrant: QdrantSettings | None = None
+    postgres: PostgresSettings | None = None
 
 
 """

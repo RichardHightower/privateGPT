@@ -90,6 +90,47 @@ class VectorStoreComponent:
                         collection_name="make_this_parameterizable_per_api_call",
                     ),  # TODO
                 )
+            case "postgres":
+                from llama_index.vector_stores import PGVectorStore
+
+                if settings.postgres is None:
+                    import psycopg2
+                    logger.info(
+                        "postgres config not found. Using default settings."
+                        "Trying to connect to postgres at postgresql://postgres:admin@localhost:5432."
+                    )
+                    connection_string = "postgresql://postgres:admin@localhost:5432"
+                    db_name = "vector_db"
+                    conn = psycopg2.connect(connection_string)
+                    conn.autocommit = True
+
+                    with conn.cursor() as c:
+                        c.execute(f"DROP DATABASE IF EXISTS {db_name}")
+                        c.execute(f"CREATE DATABASE {db_name}")
+                        ## Install the extension vector 
+                else:
+                    logger.info(
+                        "Connecting to postgres at %s:%s",
+                        settings.postgres.host,
+                        settings.postgres.port,
+                    )    
+                    # Assuming you have a storage_context and documents already loaded
+                    # https://docs.llamaindex.ai/en/stable/examples/vector_stores/postgres.html
+                    vector_store = PGVectorStore.from_params(
+                            host=settings.postgres.host,
+                            port=int(settings.postgres.port),
+                            user=settings.postgres.user,
+                            password=settings.postgres.pwd,
+                            database=settings.postgres.database,
+                            table_name=settings.postgres.table_name,
+                            embed_dim=settings.postgres.embed_dim,
+                        )
+                    
+                    self.vector_store = typing.cast(
+                        VectorStore,
+                        vector_store
+                    )
+    
             case _:
                 # Should be unreachable
                 # The settings validator should have caught this

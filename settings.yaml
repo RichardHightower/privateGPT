@@ -33,15 +33,28 @@ ui:
     the answer, just state the answer is not in the context provided.
 
 llm:
-  mode: local
+  #mode: local
+  mode: openai
 
 embedding:
   # Should be matching the value above in most cases
-  mode: local
+  #mode: local
+  mode: openai
   ingest_mode: simple
 
 vectorstore:
-  database: qdrant
+  # database: qdrant
+  database: postgres
+
+postgres:  
+  host: localhost
+  port: 5432 
+  user: postgres
+  # pwd: ${OPENAI_API_KEY:}
+  pwd: "vectordb67!"
+  database: "vectordb"
+  table_name: "vector_table"
+  embed_dim: 1536
 
 qdrant:
   path: local_data/private_gpt/qdrant
@@ -59,3 +72,4 @@ sagemaker:
 openai:
   api_key: ${OPENAI_API_KEY:}
   model: gpt-3.5-turbo
+
