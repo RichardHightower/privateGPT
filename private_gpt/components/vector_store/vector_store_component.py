@@ -113,7 +113,8 @@ class VectorStoreComponent:
                         "Connecting to postgres at %s:%s",
                         settings.postgres.host,
                         settings.postgres.port,
-                    )    
+                    )
+
                     # Assuming you have a storage_context and documents already loaded
                     # https://docs.llamaindex.ai/en/stable/examples/vector_stores/postgres.html
                     vector_store = PGVectorStore.from_params(
@@ -125,6 +126,7 @@ class VectorStoreComponent:
                             table_name=settings.postgres.table_name,
                             embed_dim=settings.postgres.embed_dim,
                         )
+                    
                     
                     self.vector_store = typing.cast(
                         VectorStore,

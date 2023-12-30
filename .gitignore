@@ -2,6 +2,8 @@
 
 settings-me.yaml
 
+env.sh
+
 .ruff_cache
 .pytest_cache
 .mypy_cache
